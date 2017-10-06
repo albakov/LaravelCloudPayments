@@ -1,4 +1,4 @@
-# LaravelCloudPayments for Laravel 5
+# CloudPayments for Laravel 5
 Package for Laravel 5 to work with CloudPayments throw API 
 
 ### Установка
