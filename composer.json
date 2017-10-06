@@ -3,7 +3,6 @@
     "description": "CloudPayments module for Laravel",
     "keywords": ["laravel", "cloudpayments"],
     "license": "MIT",
-    "version": "1.0.0",
     "minimum-stability": "dev",
     "authors": [{
         "name": "Ismail Albakov",
