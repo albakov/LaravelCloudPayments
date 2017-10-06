@@ -6,7 +6,7 @@ Package for Laravel 5 to work with CloudPayments throw API
 Используя Composer:
 
 ```
-composer require albakov/cloudpayments
+composer require albakov/laravelcloudpayments
 ```
 
 В массив providers в файле app/config/app.php добавить:
