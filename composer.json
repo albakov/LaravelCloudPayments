@@ -1,0 +1,17 @@
+{
+    "name": "albakov/cloudpayments",
+    "description": "CloudPayments module for Laravel",
+    "keywords": ["laravel", "cloudpayments"],
+    "license": "MIT",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
+    "authors": [{
+        "name": "Ismail Albakov",
+        "email": "ismail.albakov@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Albakov\\CloudPayments\\": "src"
+        }
+    }
+}
