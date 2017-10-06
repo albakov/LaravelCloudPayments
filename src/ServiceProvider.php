@@ -8,8 +8,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         // Route
+        // Insert: Albakov\CloudPayments\ServiceProvider::class 
+        // in app.php before:
+        // App\Providers\RouteServiceProvider::class
         include __DIR__ . '/routes/notifier.php';
         
+        // You can do:
+        // php artisan vendor:publish --provider='Albakov\CloudPayments\ServiceProvider' --tag=config
         $this->publishes([
             __DIR__ . '/../config/cloudpayments.php' => config_path('cloudpayments.php'),
         ], 'config');
