@@ -1,8 +1,8 @@
 <?php
 
-namespace Albakov\CloudPayments\Http;
+namespace Albakov\LaravelCloudPayments\Http;
 
-use \Albakov\CloudPayments\Notifications;
+use \Albakov\LaravelCloudPayments\Notifications;
 
 class Notifier
 {

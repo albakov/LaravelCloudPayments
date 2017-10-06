@@ -1,6 +1,6 @@
 <?php
 
-namespace Albakov\CloudPayments\Exceptions;
+namespace Albakov\LaravelCloudPayments\Exceptions;
 
 class Validation extends \Exception
 {

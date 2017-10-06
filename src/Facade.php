@@ -1,6 +1,6 @@
 <?php
 
-namespace Albakov\CloudPayments;
+namespace Albakov\LaravelCloudPayments;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
@@ -10,7 +10,7 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return CloudPayments::class;
+        return LaravelCloudPayments::class;
     }
 
 }

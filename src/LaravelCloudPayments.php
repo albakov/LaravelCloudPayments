@@ -1,10 +1,10 @@
 <?php
 
-namespace Albakov\CloudPayments;
+namespace Albakov\LaravelCloudPayments;
 
-use Albakov\CloudPayments\Exceptions\Validation;
+use Albakov\LaravelCloudPayments\Exceptions\Validation;
 
-class CloudPayments
+class LaravelCloudPayments
 {
 
     /**

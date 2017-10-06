@@ -1,5 +1,5 @@
 {
-    "name": "albakov/cloudpayments",
+    "name": "albakov/laravelcloudpayments",
     "description": "CloudPayments module for Laravel",
     "keywords": ["laravel", "cloudpayments"],
     "license": "MIT",
@@ -11,7 +11,7 @@
     }],
     "autoload": {
         "psr-4": {
-            "Albakov\\CloudPayments\\": "src"
+            "Albakov\\LaravelCloudPayments\\": "src"
         }
     }
 }

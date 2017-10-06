@@ -1,6 +1,6 @@
 <?php
 
-namespace Albakov\CloudPayments;
+namespace Albakov\LaravelCloudPayments;
 
 use Illuminate\Http\Request;
 use Log;
@@ -9,7 +9,7 @@ trait Notifications
 {
 
     /**
-     * Check data
+     * Check payment
      * @param Illuminate\Http\Request $request
      * @return json
      */
@@ -47,34 +47,36 @@ trait Notifications
      */
     public function validateAll($request)
     {
-        $secrets = $this->validateSecrets($request);
+        // $secrets = $this->validateSecrets($request);
 
-        if ($secrets['code'] !== 0) {
-            return $secrets;
-        }
+        // if ($secrets['code'] !== 0) {
+        //     return $secrets;
+        // }
 
-        // Replace $request->InvoiceId for your order id, for example:
-        // $order = Order::find($request->InvoiceId);
-        // $orderId = $order->id;
-        $orderId = $request->InvoiceId;
+        // // Replace $request->InvoiceId for your order id, for example:
+        // // $order = Order::find($request->InvoiceId);
+        // // $orderId = $order->id;
+        // $orderId = $request->InvoiceId;
 
-        $order = $this->validateOrder($request->InvoiceId, $orderId);
+        // $order = $this->validateOrder($request->InvoiceId, $orderId);
 
-        if ($order['code'] !== 0) {
-            return $order;
-        }
+        // if ($order['code'] !== 0) {
+        //     return $order;
+        // }
 
-        // Replace $request->Amount for your order amount, for example:
-        // $order->total;
-        $orderAmount = $request->Amount;
+        // // Replace $request->Amount for your order amount, for example:
+        // // $order->total;
+        // $orderAmount = $request->Amount;
 
-        $amount = $this->validateAmount($request->Amount, $orderAmount);
+        // $amount = $this->validateAmount($request->Amount, $orderAmount);
 
-        if ($amount['code'] !== 0) {
-            return $amount;
-        }
+        // if ($amount['code'] !== 0) {
+        //     return $amount;
+        // }
 
-        return ['code' => 0];
+        // return ['code' => 0];
+
+        return ['code' => 13];
     }
 
     /**
