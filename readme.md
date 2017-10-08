@@ -1,5 +1,5 @@
 # CloudPayments for Laravel 5
-Package for Laravel 5 to work with CloudPayments throw API 
+Это расширение для Laravel 5 позволит удобно работать с CloudPayments API.
 
 ### Установка
 
