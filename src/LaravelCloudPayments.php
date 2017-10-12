@@ -403,6 +403,38 @@ class LaravelCloudPayments
         ]);
     }
 
+    /**
+     * Start kkt fiscalize
+     * @param array $array
+     * @return json
+     * @return Exception
+    */
+    public function kktFiscalize($array)
+    {
+        $data = $this->_validateData($array, ['Inn', 'DeviceNumber', 'FiscalNumber', 'RegNumber', 'Url', 'Ofd', 'TaxationSystem']);
+
+        return $this->_request([
+            'url' => '/kkt/fiscalize',
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Start kkt fiscalize
+     * @param array $array
+     * @return json
+     * @return Exception
+    */
+    public function kktReceipt($array)
+    {
+        $data = $this->_validateData($array, ['Inn', 'Type', 'CustomerReceipt']);
+
+        return $this->_request([
+            'url' => '/kkt/receipt',
+            'data' => $data,
+        ]);
+    }
+
    /**
     * Check if array contains required values
    */
