@@ -36,7 +36,7 @@ return [
     'apiSecret' => 'YOUR_API_SECRET',
     'publicId' => 'YOUR_PUBLICID',
     'apiUrl' => 'https://api.cloudpayments.ru',
-    'CultureName' => 'en-US', // For more languages: https://cloudpayments.ru/Docs/Api#language
+    'cultureName' => 'en-US', // For more languages: https://cloudpayments.ru/Docs/Api#language
 ];
 ```
 

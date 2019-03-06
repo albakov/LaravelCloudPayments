@@ -4,7 +4,6 @@ namespace Albakov\LaravelCloudPayments;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-
     public function boot()
     {
         // php artisan vendor:publish --provider='Albakov\CloudPayments\ServiceProvider' --tag=config
@@ -18,10 +17,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         // Config
         $this->mergeConfigFrom(__DIR__ . '/../config/cloudpayments.php', 'cloudpayments');
- 
-        $this->app->bind('laravelcloudpayments', function() {
+
+        $this->app->bind('laravelcloudpayments', function () {
             return new LaravelCloudPayments;
         });
     }
-
 }

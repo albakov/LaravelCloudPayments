@@ -6,12 +6,11 @@ use Albakov\LaravelCloudPayments\Exceptions\Validation;
 
 class LaravelCloudPayments
 {
-
     /**
      * System language
-     * @param string $CultureName
+     * @param string $cultureName
     */
-    public $CultureName;
+    public $cultureName;
 
     /**
      * Public Id from CloudPayments account
@@ -36,7 +35,7 @@ class LaravelCloudPayments
     */
     public function __construct()
     {
-        $this->CultureName = config('cloudpayments.CultureName');
+        $this->cultureName = config('cloudpayments.cultureName');
         $this->publicId = config('cloudpayments.publicId');
         $this->apiSecret = config('cloudpayments.apiSecret');
         $this->apiUrl = config('cloudpayments.apiUrl');
@@ -47,9 +46,9 @@ class LaravelCloudPayments
      * @param array $array
      * @return array
     */
-    private function _request($array)
+    private function request($array)
     {
-        $array['data']['CultureName'] = $this->CultureName;
+        $array['data']['CultureName'] = $this->cultureName;
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, "{$this->apiUrl}{$array['url']}");
@@ -70,11 +69,11 @@ class LaravelCloudPayments
 
     /**
      * Test API
-     * @return json
-    */
+     * @return array
+     */
     public function testAPI()
     {
-        return $this->_request([
+        return $this->request([
             'url' => '/test',
         ]);
     }
@@ -82,14 +81,17 @@ class LaravelCloudPayments
     /**
      * Create cards payment request
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function cardsCharge($array)
     {
-        $data = $this->_validateData($array, ['Amount', 'Currency', 'IpAddress', 'Name', 'CardCryptogramPacket']);
+        $data = $this->validateData(
+            $array,
+            ['Amount', 'Currency', 'IpAddress', 'Name', 'CardCryptogramPacket']
+        );
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/cards/charge',
             'data' => $data,
         ]);
@@ -98,14 +100,17 @@ class LaravelCloudPayments
     /**
      * Create cards 2-Step payment request
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function cardsAuth($array)
     {
-        $data = $this->_validateData($array, ['Amount', 'Currency', 'IpAddress', 'Name', 'CardCryptogramPacket']);
+        $data = $this->validateData(
+            $array,
+            ['Amount', 'Currency', 'IpAddress', 'Name', 'CardCryptogramPacket']
+        );
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/cards/auth',
             'data' => $data,
         ]);
@@ -114,14 +119,14 @@ class LaravelCloudPayments
     /**
      * Get info for 3-D Secure Transaction
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function cardsPost3ds($array)
     {
-        $data = $this->_validateData($array, ['TransactionId', 'PaRes']);
+        $data = $this->validateData($array, ['TransactionId', 'PaRes']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/cards/post3ds',
             'data' => $data,
         ]);
@@ -130,14 +135,14 @@ class LaravelCloudPayments
     /**
      * Create token payment request
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function tokensCharge($array)
     {
-        $data = $this->_validateData($array, ['Amount', 'Currency', 'AccountId', 'Token']);
+        $data = $this->validateData($array, ['Amount', 'Currency', 'AccountId', 'Token']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/tokens/charge',
             'data' => $data,
         ]);
@@ -146,14 +151,14 @@ class LaravelCloudPayments
     /**
      * Create token 2-Step payment request
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function tokensAuth($array)
     {
-        $data = $this->_validateData($array, ['Amount', 'Currency', 'AccountId', 'Token']);
+        $data = $this->validateData($array, ['Amount', 'Currency', 'AccountId', 'Token']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/tokens/auth',
             'data' => $data,
         ]);
@@ -162,14 +167,14 @@ class LaravelCloudPayments
     /**
      * Confirm payment
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function transactionsConfirm($array)
     {
-        $data = $this->_validateData($array, ['TransactionId', 'Amount']);
+        $data = $this->validateData($array, ['TransactionId', 'Amount']);
         
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/confirm',
             'data' => $data,
         ]);
@@ -178,14 +183,14 @@ class LaravelCloudPayments
     /**
      * Refund payment
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function transactionsRefund($array)
     {
-        $data = $this->_validateData($array, ['TransactionId', 'Amount']);
+        $data = $this->validateData($array, ['TransactionId', 'Amount']);
        
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/refund',
             'data' => $data,
         ]);
@@ -194,16 +199,16 @@ class LaravelCloudPayments
     /**
      * Cancel payment
      * @param int $transactionId
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function transactionsVoid($transactionId)
     {
         if (empty($transactionId)) {
             throw new Validation(['transactionId']);
         }
        
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/void',
             'data' => ['TransactionId' => (int) $transactionId],
         ]);
@@ -212,16 +217,16 @@ class LaravelCloudPayments
     /**
      * Get transaction info by transaction id
      * @param int $transactionId
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function transactionsGet($transactionId)
     {
         if (empty($transactionId)) {
             throw new Validation(['transactionId']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/get',
             'data' => ['TransactionId' => (int) $transactionId],
         ]);
@@ -230,16 +235,16 @@ class LaravelCloudPayments
     /**
      * Get payment info by payment invoice id
      * @param int|string $invoiceId
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function paymentsFind($invoiceId)
     {
         if (empty($invoiceId)) {
             throw new Validation(['InvoiceId']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/find',
             'data' => ['InvoiceId' => (string) $invoiceId],
         ]);
@@ -248,14 +253,14 @@ class LaravelCloudPayments
     /**
      * Get transaction list
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function transactionsList($array)
     {
-        $data = $this->_validateData($array, ['Date']);
+        $data = $this->validateData($array, ['Date']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/payments/list',
             'data' => $data,
         ]);
@@ -264,18 +269,28 @@ class LaravelCloudPayments
     /**
      * Create subscription
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function subscriptionsCreate($array)
     {
-        $data = $this->_validateData(
+        $data = $this->validateData(
             $array,
-            ['Token','AccountId','Description','Email', 'Amount',
-            'Currency','RequireConfirmation', 'StartDate','Interval','Period']
+            [
+                'Token',
+                'AccountId',
+                'Description',
+                'Email',
+                'Amount',
+                'Currency',
+                'RequireConfirmation',
+                'StartDate',
+                'Interval',
+                'Period'
+            ]
         );
 
-        return $this->_request([
+        return $this->request([
             'url' => '/subscriptions/create',
             'data' => $data,
         ]);
@@ -284,16 +299,16 @@ class LaravelCloudPayments
     /**
      * Get subscription info
      * @param int $id
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function subscriptionsInfo($id)
     {
         if (empty($id)) {
             throw new Validation(['Id']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/subscriptions/get',
             'data' => ['Id' => (int) $id],
         ]);
@@ -302,16 +317,16 @@ class LaravelCloudPayments
     /**
      * Find subscriptions
      * @param string $accountId
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function subscriptionsFind($accountId)
     {
         if (empty($accountId)) {
             throw new Validation(['accountId']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/subscriptions/find',
             'data' => ['accountId' => (string) $accountId],
         ]);
@@ -320,14 +335,14 @@ class LaravelCloudPayments
     /**
      * Update subscription
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function subscriptionsUpdate($array)
     {
-        $data = $this->_validateData($array, ['Id']);
+        $data = $this->validateData($array, ['Id']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/subscriptions/update',
             'data' => $data,
         ]);
@@ -335,17 +350,17 @@ class LaravelCloudPayments
 
     /**
      * Cancel subscription
-     * @param int $Id
-     * @return json
-     * @return Exception
-    */
+     * @param $id
+     * @return array
+     * @throws Validation
+     */
     public function subscriptionsCancel($id)
     {
         if (empty($id)) {
             throw new Validation(['Id']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/subscriptions/cancel',
             'data' => ['Id' => (int) $id],
         ]);
@@ -354,14 +369,14 @@ class LaravelCloudPayments
     /**
      * Order create
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function ordersCreate($array)
     {
-        $data = $this->_validateData($array, ['Amount', 'Currency', 'Description']);
+        $data = $this->validateData($array, ['Amount', 'Currency', 'Description']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/orders/create',
             'data' => $data,
         ]);
@@ -370,16 +385,16 @@ class LaravelCloudPayments
     /**
      * Cancel order
      * @param string $id
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function ordersCancel($id)
     {
         if (empty($id)) {
             throw new Validation(['Id']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/orders/cancel',
             'data' => ['Id' => (string) $id],
         ]);
@@ -387,17 +402,17 @@ class LaravelCloudPayments
 
     /**
      * Start session Apple Pay
-     * @param string $ValidationUrl
-     * @return json
-     * @return Exception
-    */
+     * @param $validationUrl
+     * @return array
+     * @throws Validation
+     */
     public function applePayStartSession($validationUrl)
     {
         if (empty($validationUrl)) {
             throw new Validation(['ValidationUrl']);
         }
 
-        return $this->_request([
+        return $this->request([
             'url' => '/applepay/startsession',
             'data' => ['ValidationUrl' => (string) $validationUrl],
         ]);
@@ -406,14 +421,25 @@ class LaravelCloudPayments
     /**
      * Start kkt fiscalize
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function kktFiscalize($array)
     {
-        $data = $this->_validateData($array, ['Inn', 'DeviceNumber', 'FiscalNumber', 'RegNumber', 'Url', 'Ofd', 'TaxationSystem']);
+        $data = $this->validateData(
+            $array,
+            [
+                'Inn',
+                'DeviceNumber',
+                'FiscalNumber',
+                'RegNumber',
+                'Url',
+                'Ofd',
+                'TaxationSystem'
+            ]
+        );
 
-        return $this->_request([
+        return $this->request([
             'url' => '/kkt/fiscalize',
             'data' => $data,
         ]);
@@ -422,28 +448,32 @@ class LaravelCloudPayments
     /**
      * Start kkt fiscalize
      * @param array $array
-     * @return json
-     * @return Exception
-    */
+     * @return array
+     * @throws Validation
+     */
     public function kktReceipt($array)
     {
-        $data = $this->_validateData($array, ['Inn', 'Type', 'CustomerReceipt']);
+        $data = $this->validateData($array, ['Inn', 'Type', 'CustomerReceipt']);
 
-        return $this->_request([
+        return $this->request([
             'url' => '/kkt/receipt',
             'data' => $data,
         ]);
     }
 
-   /**
-    * Check if array contains required values
-   */
-    private function _validateData($array, $rules)
+    /**
+     * Check if array contains required values
+     * @param $array
+     * @param $rules
+     * @return mixed
+     * @throws Validation
+     */
+    private function validateData($array, $rules)
     {
-        $arrayDeff = array_diff($rules, array_keys($array));
+        $arrayDiff = array_diff($rules, array_keys($array));
 
-        if (count($arrayDeff)) {
-            throw new Validation($arrayDeff);
+        if (count($arrayDiff) > 0) {
+            throw new Validation($arrayDiff);
         }
 
         return $array;

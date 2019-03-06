@@ -3,15 +3,14 @@
 namespace Albakov\LaravelCloudPayments;
 
 use Illuminate\Http\Request;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 trait Notifications
 {
-
     /**
      * Check payment
-     * @param Illuminate\Http\Request $request
-     * @return json
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function check(Request $request)
     {
@@ -21,12 +20,11 @@ trait Notifications
 
     /**
      * Confirm payment
-     * @param Illuminate\Http\Request $request
-     * @return json
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function pay(Request $request)
     {
-
         $data = $this->validateAll($request);
 
         if ((int) $data['code'] === 0) {
@@ -42,7 +40,7 @@ trait Notifications
     /**
      * !!!FOR TEST ONLY!!!
      * Check data
-     * @param Illuminate\Http\Request $request
+     * @param $request
      * @return array
      */
     public function validateAll($request)
@@ -53,9 +51,9 @@ trait Notifications
         //     return $secrets;
         // }
 
-        // // Replace $request->InvoiceId for your order id, for example:
-        // // $order = Order::find($request->InvoiceId);
-        // // $orderId = $order->id;
+         // Replace $request->InvoiceId for your order id, for example:
+         // $order = Order::find($request->InvoiceId);
+         // $orderId = $order->id;
         // $orderId = $request->InvoiceId;
 
         // $order = $this->validateOrder($request->InvoiceId, $orderId);
@@ -64,8 +62,8 @@ trait Notifications
         //     return $order;
         // }
 
-        // // Replace $request->Amount for your order amount, for example:
-        // // $order->total;
+         // Replace $request->Amount for your order amount, for example:
+         // $order->total;
         // $orderAmount = $request->Amount;
 
         // $amount = $this->validateAmount($request->Amount, $orderAmount);
@@ -81,50 +79,58 @@ trait Notifications
 
     /**
      * Validate Secrets
-     * @return object $request
-     * @return array
+     * @param $request
+     * @return array $request
      */
     public function validateSecrets($request)
     {
         // Create Site Secret
-        $secret = hash_hmac('sha256', file_get_contents('php://input'), config('cloudpayments.apiSecret'), true);
+        $secret = hash_hmac(
+            'sha256',
+            file_get_contents('php://input'),
+            config('cloudpayments.apiSecret'),
+            true
+        );
+
         $secret = base64_encode($secret);
 
         // Get CloudPayments secret
-        $headers = apache_request_headers();
-        $secretCloudPayments = isset($headers['Content-Hmac']) ? $headers['Content-Hmac'] : '';
+        $secretCloudPayments = $request->header('Content-Hmac');
 
         // Check secrets
         if (!empty($secretCloudPayments) && $secret === $secretCloudPayments) {
             return ['code' => 0];
         }
 
-        Log::error("Secret from CloudPayments doesn\'t match Site Secret! Site secret: {$secret} and Content-Hmac: {$secretCloudPayments} Check API Secret!");
+
+        Log::error("Secret from CloudPayments doesn\'t match Site Secret! 
+        Site secret: {$secret} and Content-Hmac: {$secretCloudPayments} Check API Secret!");
+
         return ['code' => 13];
     }
 
     /**
      * Validate order
-     * @return string $invoiceId
-     * @return string $orderId
-     * @return array
+     * @param $invoiceId
+     * @param $orderId
+     * @return array $invoiceId
      */
     public function validateOrder($invoiceId, $orderId)
     {
-
         if ((string) $invoiceId === (string) $orderId) {
             return ['code' => 0];
         }
 
         Log::error("Order not found! Incoming order: {$invoiceId}.");
+
         return ['code' => 10];
     }
-    
+
     /**
      * Validate amount
-     * @return string $amount
-     * @return string|Int|Float $orderAmount
-     * @return array
+     * @param $amount
+     * @param $orderAmount
+     * @return array $amount
      */
     public function validateAmount($amount, $orderAmount)
     {
@@ -136,7 +142,9 @@ trait Notifications
             return ['code' => 0];
         }
 
-        Log::error("Order amount doesn't match CloudPayments amount! Incoming amount: {$amount}, Order amount: {$orderAmount}");
+        Log::error("Order amount doesn't match CloudPayments amount! 
+        Incoming amount: {$amount}, Order amount: {$orderAmount}");
+
         return ['code' => 11];
     }
 }

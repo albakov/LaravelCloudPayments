@@ -3,9 +3,8 @@
     "description": "CloudPayments module for Laravel",
     "keywords": ["laravel", "cloudpayments"],
     "license": "MIT",
-    "minimum-stability": "dev",
     "authors": [{
-        "name": "Ismail Albakov",
+        "name": "Ismail",
         "email": "ismail.albakov@gmail.com"
     }],
     "autoload": {
@@ -16,6 +15,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Albakov\\LaravelCloudPayments\\ServiceProvider"
+            ]
         }
     }
 }
