@@ -310,7 +310,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/subscriptions/get',
-            'data' => ['Id' => (int) $id],
+            'data' => ['Id' => (string) $id],
         ]);
     }
 
