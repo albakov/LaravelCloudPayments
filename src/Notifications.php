@@ -102,7 +102,6 @@ trait Notifications
             return ['code' => 0];
         }
 
-
         Log::error("Secret from CloudPayments doesn\'t match Site Secret! 
         Site secret: {$secret} and Content-Hmac: {$secretCloudPayments} Check API Secret!");
 

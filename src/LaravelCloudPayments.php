@@ -210,7 +210,7 @@ class LaravelCloudPayments
        
         return $this->request([
             'url' => '/payments/void',
-            'data' => ['TransactionId' => (int) $transactionId],
+            'data' => ['TransactionId' => $transactionId],
         ]);
     }
 
@@ -228,7 +228,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/payments/get',
-            'data' => ['TransactionId' => (int) $transactionId],
+            'data' => ['TransactionId' => $transactionId],
         ]);
     }
 
@@ -246,7 +246,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/payments/find',
-            'data' => ['InvoiceId' => (string) $invoiceId],
+            'data' => ['InvoiceId' => $invoiceId],
         ]);
     }
 
@@ -310,7 +310,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/subscriptions/get',
-            'data' => ['Id' => (string) $id],
+            'data' => ['Id' => $id],
         ]);
     }
 
@@ -328,7 +328,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/subscriptions/find',
-            'data' => ['accountId' => (string) $accountId],
+            'data' => ['accountId' => $accountId],
         ]);
     }
 
@@ -362,7 +362,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/subscriptions/cancel',
-            'data' => ['Id' => (int) $id],
+            'data' => ['Id' => $id],
         ]);
     }
 
@@ -396,7 +396,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/orders/cancel',
-            'data' => ['Id' => (string) $id],
+            'data' => ['Id' => $id],
         ]);
     }
 
@@ -414,7 +414,7 @@ class LaravelCloudPayments
 
         return $this->request([
             'url' => '/applepay/startsession',
-            'data' => ['ValidationUrl' => (string) $validationUrl],
+            'data' => ['ValidationUrl' => $validationUrl],
         ]);
     }
 
